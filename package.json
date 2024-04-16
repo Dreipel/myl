@@ -1,0 +1,29 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "Proyecto para poder identificar las cartas restantes que me quedan en la coleccion de mitos y leyendas",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dreipel/myl.git"
+  },
+  "keywords": [
+    "myl",
+    "coleccion"
+  ],
+  "author": "Jorge Almonacid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dreipel/myl/issues"
+  },
+  "homepage": "https://github.com/Dreipel/myl#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.3.1"
+  }
+}
