@@ -5,6 +5,9 @@ require('dotenv/config');
   
 // Local Modules 
 const myRoute = require('./routes/myRoute.js'); 
+const userRoute = require('./routes/usersRoute.js'); 
+const editionRoute = require('./routes/editionsRoute.js'); 
+const myCardsRoute = require('./routes/myCardsRoute.js'); 
 const { connect } = require('./connection/connection.js');
 
   
@@ -17,7 +20,9 @@ app.use(express.json());
   
 // Routes will be written here 
 app.use('/route', myRoute);  
-
+app.use('/User', userRoute); 
+app.use('/Edition', editionRoute);
+app.use('/MyCards',myCardsRoute);
 
 connect();
   

@@ -9,6 +9,7 @@ const router = Router();
   
 // Requests  
 router.get('/', myController.method1); 
+router.get('/Test', myController.method2); 
 router.post('/', myController.method2); 
   
 module.exports = router;
