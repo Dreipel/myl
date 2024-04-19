@@ -22,8 +22,10 @@
   },
   "homepage": "https://github.com/Dreipel/myl#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "google-auth-library": "^9.8.0",
     "mongodb": "^6.5.0",
     "mongoose": "^7.6.3"
   }

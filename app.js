@@ -1,6 +1,7 @@
 
 // 3rd Party Modules 
-const express = require('express'); 
+const express = require('express');
+const cors = require("cors");
 require('dotenv/config'); 
   
 // Local Modules 
@@ -10,13 +11,18 @@ const editionRoute = require('./routes/editionsRoute.js');
 const myCardsRoute = require('./routes/myCardsRoute.js'); 
 const { connect } = require('./connection/connection.js');
 
-  
+
 // Server Initialization 
 const app = express(); 
 const PORT = process.env.PORT; 
   
 // Middlewares 
-app.use(express.json()); 
+app.use(express.json());
+const corsOptions = {
+    credentials: true,
+    origin: ['http://localhost:3000', 'https://myl.jorgealmonacid.com'] // Whitelist the domains you want to allow
+};
+app.use(cors(corsOptions)); 
   
 // Routes will be written here 
 app.use('/route', myRoute);  
