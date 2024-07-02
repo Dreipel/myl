@@ -9,5 +9,7 @@ const router = Router();
   
 // Requests  
 router.get('/', editionController.getEditions); 
+router.put('/', editionController.putEdition);
+router.post('/', editionController.postEdition);
   
 module.exports = router;

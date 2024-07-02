@@ -2,6 +2,7 @@ const MyCards = require('../models/MyCards.js');
 const Cards = require('../models/Cards.js');
 const { RESPONSE } = require('../helpers/response_helper.js');
 const mongoose = require('mongoose');
+const axios = require('axios');
 
 //post user to create users o get user created
 const getMyCards = async (req, res)=>{ 
@@ -12,6 +13,7 @@ const getMyCards = async (req, res)=>{
             return RESPONSE({error: true,message:'Se deben enviar todos los campos',status:200,data:[],res});
         }
         const objectEdition = new mongoose.Types.ObjectId(id_edition);
+        const objectUser = new mongoose.Types.ObjectId(id_user);
         const cards = await Cards.aggregate([
             {
                 $match: {
@@ -21,8 +23,19 @@ const getMyCards = async (req, res)=>{
             {
                 $lookup: {
                     from: "my_cards", // collection name in db
-                    localField: "_id",
-                    foreignField: "id_card",
+                    let: { 'card_id': '$_id' },
+                    pipeline: [
+                        { 
+                            $match: { 
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$id_user", objectUser] },
+                                        { $eq: ["$id_card", "$$card_id"] }
+                                    ]
+                                }
+                            } 
+                        },
+                    ],
                     as: "collected"
                 },
             },
@@ -31,11 +44,15 @@ const getMyCards = async (req, res)=>{
                     "path": "$collected",
                     "preserveNullAndEmptyArrays": true
                 }
+            },
+            {
+                $sort: {folio: 1}
             }
         ]).exec();
 
         RESPONSE({error: false,message:'Cartas encontradas',status:200,data: cards,res });
     }catch(error){
+        console.log(error);
         RESPONSE({error: true,message:'Error al crear la carta',status:200,data: error,res });
     }
 } 
@@ -49,6 +66,20 @@ const postMyCard = async (req,res) =>{
             id_card, 
             quantity 
         });
+
+        const card = await myCard.aggregate([
+            {
+                $match: {
+                    id_edition: objectEdition,
+                    id_card: id_card,
+                },
+            },
+        ]).exec();
+
+        if( Array.isArray(card) && card.length !== 0 ){
+            return RESPONSE({error: false,message:'Carta Creada',status:200,data: card,res });
+        }
+
         const resp = await myCard.save();
     
         RESPONSE({error: false,message:'Carta Creada',status:200,data: resp,res });
@@ -76,6 +107,10 @@ const postMyCards = async (req,res) =>{
             });
         });
 
+        const deleteCards = await MyCards.deleteMany({ id_edition, id_user });
+
+        console.log(deleteCards)
+
         const resp = await MyCards.insertMany(arrayCards);
     
         RESPONSE({error: false,message:'Carta Creada',status:200,data: resp,res });
@@ -97,9 +132,35 @@ const deleteMyCard = async (req,res) =>{
 
 }
 
+const timeout = async (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const putReactualizarImagenes = async (req,res) =>{
+    try{
+        const resp = await Cards.find().exec();
+
+        for (let index = 0; index < resp.length; index++) {
+            const card = resp[index];
+
+            await timeout(2000);
+            console.log(index);
+            await Cards.updateOne({_id: card._id}, {image: `https://storage.cloud.google.com/myl-collector/cards/explorandum/${card.edid}.png` })
+        }
+    
+        RESPONSE({error: false,message:'Carta eliminada de la coleccion',status:200,data: {},res });
+    }catch(error){
+        console.log(error);
+        RESPONSE({error: true,message:'Error al eliminar la coleccion',status:200,data: error,res });
+    }
+
+}
+
+
 module.exports = { 
     getMyCards,
     postMyCard,
     postMyCards,
-    deleteMyCard
+    deleteMyCard,
+    putReactualizarImagenes
 }

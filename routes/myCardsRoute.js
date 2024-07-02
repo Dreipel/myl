@@ -14,6 +14,6 @@ router.delete('/', myCardController.deleteMyCard);
 router.post('/multiple', myCardController.postMyCards); 
 router.post('/Collection', myCardController.getMyCards); 
 
-
+router.put('/ReactualizarImagenes', myCardController.putReactualizarImagenes); 
   
 module.exports = router;

@@ -18,6 +18,7 @@ let Cards = new Schema({
     ed_slug: { type: String },
     folio: { type: Number },
     image: { type: String },
+    image_compress: { type: String },
     name_edition: { type: String },
     name_keyword: { type: String },
     name_race: { type: String },

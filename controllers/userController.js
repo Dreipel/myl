@@ -34,7 +34,8 @@ const postUser = async (req, res)=>{
                 token,
                 image
             });
-            resp = await user.save();
+            await user.save();
+            resp = await Users.find({email: email }).exec();
         }
         //response the user created or not created
         RESPONSE({error: false,message:'Login ok',status:200,data: resp,res });
@@ -43,8 +44,6 @@ const postUser = async (req, res)=>{
     }
     
 } 
-
-
 
 module.exports = { 
     postUser
