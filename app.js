@@ -5,7 +5,7 @@ const cors = require("cors");
 require('dotenv/config'); 
   
 // Local Modules 
-const myRoute = require('./routes/myRoute.js');
+// const myRoute = require('./routes/myRoute.js');
 const userRoute = require('./routes/usersRoute.js');
 const editionRoute = require('./routes/editionsRoute.js');
 const myCardsRoute = require('./routes/myCardsRoute.js');
@@ -22,7 +22,7 @@ app.use(express.json({limit: '500mb'}));
 app.use(express.urlencoded({limit: '500mb'}));
 const corsOptions = {
     credentials: true,
-    origin: ['http://localhost:3000', 'https://myl.jorgealmonacid.com'] // Whitelist the domains you want to allow
+    origin: ['http://localhost:3000','http://localhost:3001', 'https://myl.jorgealmonacid.com'] // Whitelist the domains you want to allow
 };
 app.use(cors(corsOptions)); 
   
