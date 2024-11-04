@@ -63,7 +63,7 @@ const generateFolio = async (req, res)=>{
 const timeout = async (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-const createCards = async ( req,res ) =>{
+const createCards = async ( req , res ) =>{
 
     const { arrayCards, nameEdition } = req.body;
 
@@ -127,9 +127,14 @@ const createCards = async ( req,res ) =>{
 
 }
 
+const test = async ( req, res ) =>{
+    res.status(200).send({mensaje: "hola"});
+}
+
 // Export of all methods as object 
 module.exports = { 
     generateFolio,
     createCards,
-    generateImgCompress
+    generateImgCompress,
+    test
 }

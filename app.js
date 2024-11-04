@@ -14,9 +14,9 @@ const { connect } = require('./connection/connection.js');
 
 
 // Server Initialization 
-const app = express(); 
+const app = express();
 const PORT = process.env.PORT; 
-  
+
 // Middlewares 
 app.use(express.json({limit: '500mb'}));
 app.use(express.urlencoded({limit: '500mb'}));
@@ -28,7 +28,7 @@ app.use(cors(corsOptions));
   
 // Routes will be written here 
 // app.use('/route', myRoute);  
-app.use('/User', userRoute); 
+app.use('/User', userRoute);
 app.use('/Edition', editionRoute);
 app.use('/MyCards',myCardsRoute);
 app.use('/Cards',cardRoute);
@@ -40,7 +40,7 @@ connect();
 app.listen(PORT, (error) =>{ 
     if(!error){
         console.log("Server is Successfully Running,  and App is listening on port "+ PORT) 
-     }else 
+    }else 
         console.log("Error occurred, server can't start", error); 
     } 
 );
