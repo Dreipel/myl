@@ -104,22 +104,36 @@ const createCards = async ( req,res ) =>{
         card.id_raritie=rarity;
         card.id_type=type;
 
-       
-        const image = await axios.get(preUrl, {responseType: 'arraybuffer'});
-        const returnedB64 = Buffer.from(image.data).toString('base64');
-        const returnedB64Compressed = await compress({ base64: returnedB64 });
-    
-        const urlCompressed = await BlobGenerateImage({fileName: card.edid+'.png' ,data: returnedB64Compressed,edition: nameEdition });
-        const url = await BlobGenerateImage({fileName: card.edid+'_low.png' ,data: returnedB64 , edition: nameEdition });
-
-        card.image = url;
-        card.image_compress = urlCompressed;
-
-        await timeout(1000);
-
-        const newCard = new Cards(card);
-        const cardCreated = await newCard.save();
-        console.log(cardCreated);
+        if(edicion){
+            const objectEdition = new  mongoose.Types.ObjectId(edicion);
+            console.log(objectEdition);
+            console.log('edid: ',card.edid);
+            console.log('ed_edid: ',card.ed_edid);
+            const encontrado = await Cards.findOne({  id_edition :objectEdition, ed_edid:  card.ed_edid, edid: card.edid }).exec();
+            if(!encontrado){
+                const image = await axios.get(preUrl, {responseType: 'arraybuffer'});
+                const returnedB64 = Buffer.from(image.data).toString('base64');
+                const returnedB64Compressed = await compress({ base64: returnedB64 });
+            
+                const urlCompressed = await BlobGenerateImage({fileName: card.edid+'.png' ,data: returnedB64Compressed,edition: nameEdition });
+                const url = await BlobGenerateImage({fileName: card.edid+'_low.png' ,data: returnedB64 , edition: nameEdition });
+        
+                card.image = url;
+                card.image_compress = urlCompressed;
+        
+                await timeout(1000);
+        
+                const newCard = new Cards(card);
+                const cardCreated = await newCard.save();
+                console.log(cardCreated);
+            }else{
+                console.log('carta encontrada: ',encontrado.name);
+            }
+        }else{
+            console.log('sin edicion');
+            console.log('edicion: ',edicion);
+            console.log(card);
+        }
     }
     
 

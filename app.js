@@ -10,8 +10,8 @@ const userRoute = require('./routes/usersRoute.js');
 const editionRoute = require('./routes/editionsRoute.js');
 const myCardsRoute = require('./routes/myCardsRoute.js');
 const cardRoute = require('./routes/cardsRoute.js');
+const formatRoute = require('./routes/formatsRoute.js');
 const { connect } = require('./connection/connection.js');
-
 
 // Server Initialization 
 const app = express(); 
@@ -32,6 +32,7 @@ app.use('/User', userRoute);
 app.use('/Edition', editionRoute);
 app.use('/MyCards',myCardsRoute);
 app.use('/Cards',cardRoute);
+app.use('/Formats',formatRoute);
 
 connect();
   
