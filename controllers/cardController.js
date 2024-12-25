@@ -63,6 +63,7 @@ const generateFolio = async (req, res)=>{
 const timeout = async (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
 const createCards = async ( req,res ) =>{
 
     const { arrayCards, nameEdition } = req.body;
@@ -141,9 +142,19 @@ const createCards = async ( req,res ) =>{
 
 }
 
+
+const getAllCards = async ( req,res ) =>{
+   
+    const cards = await Cards.find({});
+    //response the user created or not created
+    RESPONSE({error: false,message:'Cartas encontradas',status:200,data: cards,res });
+
+}
+
 // Export of all methods as object 
 module.exports = { 
     generateFolio,
     createCards,
-    generateImgCompress
+    generateImgCompress,
+    getAllCards
 }

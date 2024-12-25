@@ -13,7 +13,7 @@ const getEditions = async (req, res)=>{
     if( idFormat ){
         query = {
             ...query,
-            format: new mongoose.Types.ObjectId(idFormat),
+            format: new mongoose.Types.ObjectId(idFormat)
         }
     }
 

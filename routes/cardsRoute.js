@@ -9,5 +9,6 @@ const router = Router();
   
 // Requests  
 router.get('/', cardController.generateImgCompress); 
-router.post('/', cardController.createCards); 
+router.post('/', cardController.createCards);
+router.get('/AllCards', cardController.getAllCards); 
 module.exports = router;
