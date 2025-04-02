@@ -151,10 +151,26 @@ const getAllCards = async ( req,res ) =>{
 
 }
 
+
+
+const getCardsByFormatFuriaExtension = async ( req,res ) =>{
+    const cards = await Cards.aggregate([
+        {
+            $match:{
+                "format": new  mongoose.Types.ObjectId("67622d5b21018745d6b30b87")
+            }
+        }
+    ]);
+    //response the user created or not created
+    RESPONSE({error: false,message:'Cartas encontradas',status:200,data: cards,res });
+
+}
+
 // Export of all methods as object 
 module.exports = { 
     generateFolio,
     createCards,
     generateImgCompress,
-    getAllCards
+    getAllCards,
+    getCardsByFormatFuriaExtension
 }

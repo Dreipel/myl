@@ -44,6 +44,11 @@ let Cards = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'types'
     },
+    format: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'formats'
+    },
+    formatName: { type: String },
 });
 
 module.exports = mongoose.model('cards', Cards);
