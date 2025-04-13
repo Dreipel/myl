@@ -272,6 +272,24 @@ const getMyDeck = async (req, res)=>{
     }
 }
 
+const getMyDeckShared = async (req, res)=>{ 
+    try{
+        const { id_deck } = req.query;
+        //validate if email, name and token are sended
+        if(!id_deck){
+            return RESPONSE({error: true,message:'Se deben enviar todos los campos',status:200,data:[],res});
+        }
+        const objectDeck = new mongoose.Types.ObjectId(id_deck);
+        const myDeckShared = await Decks.findOne({ _id: objectDeck });
+
+        RESPONSE({error: false,message:'Cartas encontradas',status:200,data: myDeckShared,res });
+    }catch(error){
+        console.log(error);
+        RESPONSE({error: true,message:'Error al crear la carta',status:200,data: error,res });
+    }
+}
+
+
 const putReactualizarImagenes = async (req,res) =>{
     try{
         const resp = await Cards.find().exec();
@@ -302,5 +320,6 @@ module.exports = {
     postDeck,
     getDecks,
     getMyDeck,
-    putDeck
+    putDeck,
+    getMyDeckShared
 }

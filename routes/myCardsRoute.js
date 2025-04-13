@@ -17,6 +17,7 @@ router.post('/Deck', myCardController.postDeck);
 router.put('/Deck', myCardController.putDeck);
 router.get('/MyDecks', myCardController.getDecks);
 router.get('/MyDeck', myCardController.getMyDeck); 
+router.get('/MyDeck/Share', myCardController.getMyDeckShared); 
 
 
 
