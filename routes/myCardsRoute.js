@@ -13,6 +13,12 @@ router.post('/', myCardController.postMyCard);
 router.delete('/', myCardController.deleteMyCard); 
 router.post('/multiple', myCardController.postMyCards); 
 router.post('/Collection', myCardController.getMyCards); 
+router.post('/Deck', myCardController.postDeck);
+router.put('/Deck', myCardController.putDeck);
+router.get('/MyDecks', myCardController.getDecks);
+router.get('/MyDeck', myCardController.getMyDeck); 
+
+
 
 router.put('/ReactualizarImagenes', myCardController.putReactualizarImagenes); 
   

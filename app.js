@@ -11,6 +11,8 @@ const editionRoute = require('./routes/editionsRoute.js');
 const myCardsRoute = require('./routes/myCardsRoute.js');
 const cardRoute = require('./routes/cardsRoute.js');
 const formatRoute = require('./routes/formatsRoute.js');
+const raceRoute = require('./routes/racesRoute.js');
+const typeRoute = require('./routes/typesRoute.js');
 const { connect } = require('./connection/connection.js');
 
 // Server Initialization 
@@ -33,6 +35,8 @@ app.use('/Edition', editionRoute);
 app.use('/MyCards',myCardsRoute);
 app.use('/Cards',cardRoute);
 app.use('/Formats',formatRoute);
+app.use('/Races',raceRoute);
+app.use('/Types',typeRoute);
 
 connect();
   

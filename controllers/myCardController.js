@@ -3,6 +3,7 @@ const Cards = require('../models/Cards.js');
 const { RESPONSE } = require('../helpers/response_helper.js');
 const mongoose = require('mongoose');
 const axios = require('axios');
+const Decks = require('../models/Decks.js');
 
 //post user to create users o get user created
 const getMyCards = async (req, res)=>{ 
@@ -136,6 +137,141 @@ const timeout = async (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const postDeck = async (req,res) =>{
+    try{
+
+        const { name, cards , id_user  } = req.body;
+
+        if( !id_user ){
+            return RESPONSE({error: true,message:'Se deben enviar todos los campos',status:200,data:[],res});
+        }
+
+        if( Array.isArray(cards) && cards.length === 0 ){
+            return RESPONSE({error: false,message:'Se debe enviar el listado de cartas',status:200,data: req.body,res });
+        }
+
+        let newCards = cards.map((card) => {
+            return data = {
+                quantity: card.quantity,
+                cardId:  new mongoose.Types.ObjectId(card._id),
+                name: card.name,
+                id: card.id,
+                slug: card.slug,
+                name:  card.name,
+                edid: card.edid,
+                rarity:  card.rarity,
+                race: card.race,
+                type: card.type,
+                cost:  card.cost,
+                damage:  card.damage,
+                ability: card.ability,
+                flavour:  card.flavour,
+                ed_edid: card.ed_edid,
+                ed_slug: card.ed_slug,
+                folio: card.folio,
+                image:  card.image,
+                image_compress: card.image_compress,
+                name_edition:  card.name_edition,
+                name_keyword:  card.name_keyword,
+                name_race: card.name_race,
+                name_raritie: card.name_raritie,
+                name_type: card.name_type,
+            }
+        });
+
+        let myDeck = new Decks({
+            name,
+            cards:newCards,
+            idUser: id_user
+        });
+
+        const resp = await myDeck.save();
+    
+        RESPONSE({error: false,message:'Carta Creada',status:200,data: resp,res });
+    }catch(error){
+        console.log(error);
+        RESPONSE({error: true,message:'Error al crear la carta',status:200,data: error,res });
+    }
+}
+
+const putDeck = async (req,res) =>{
+    try{
+
+        const { _id , name, cards , id_user  } = req.body;
+
+        if( !id_user || !_id ){
+            return RESPONSE({error: true,message:'Se deben enviar todos los campos',status:200,data:[],res});
+        }
+
+        if( Array.isArray(cards) && cards.length === 0 ){
+            return RESPONSE({error: false,message:'Se debe enviar el listado de cartas',status:200,data: req.body,res });
+        }
+
+        const objectUser = new mongoose.Types.ObjectId(id_user);
+        const objectDeck = new mongoose.Types.ObjectId(_id);
+        const myDeck = await Decks.findOne({idUser: objectUser, _id: objectDeck });
+
+        if(!myDeck){
+            return RESPONSE({error: false,message:'No se encontro un deck para editar',status:200,data: req.body,res });
+        }
+
+        const myNewDeck = await Decks.updateOne({idUser: objectUser, _id: objectDeck },{
+            name:name,
+            cards:cards,
+        });
+
+        if(myNewDeck && myNewDeck.modifiedCount === 1){
+
+            const deckUpdated = await Decks.findOne({idUser: objectUser, _id: objectDeck });
+
+            RESPONSE({error: false,message:'Carta Creada',status:200,data: deckUpdated,res });
+        }else{
+            RESPONSE({error: true,message:'Error al actualizar deck',status:200,data: {},res });
+        }
+      
+    
+       
+    }catch(error){
+        console.log(error);
+        RESPONSE({error: true,message:'Error al actualizar el deck',status:200,data: error,res });
+    }
+}
+
+const getDecks = async (req, res)=>{ 
+    try{
+        const { id_user } = req.query;
+        //validate if email, name and token are sended
+        if( !id_user ){
+            return RESPONSE({error: true,message:'Se deben enviar todos los campos',status:200,data:[],res});
+        }
+        const objectUser = new mongoose.Types.ObjectId(id_user);
+        const myDecks = await Decks.find({idUser: objectUser});
+
+        RESPONSE({error: false,message:'Decks encontrados',status:200,data: myDecks,res });
+    }catch(error){
+        console.log(error);
+        RESPONSE({error: true,message:'Error al obtener decks la carta',status:200,data: error,res });
+    }
+}
+
+const getMyDeck = async (req, res)=>{ 
+    try{
+        const {id_deck, id_user } = req.query;
+        //validate if email, name and token are sended
+        if(!id_deck || !id_user){
+            return RESPONSE({error: true,message:'Se deben enviar todos los campos',status:200,data:[],res});
+        }
+        const objectUser = new mongoose.Types.ObjectId(id_user);
+        const objectDeck = new mongoose.Types.ObjectId(id_deck);
+        const myDeck = await Decks.findOne({idUser: objectUser, _id: objectDeck });
+
+        RESPONSE({error: false,message:'Cartas encontradas',status:200,data: myDeck,res });
+    }catch(error){
+        console.log(error);
+        RESPONSE({error: true,message:'Error al crear la carta',status:200,data: error,res });
+    }
+}
+
 const putReactualizarImagenes = async (req,res) =>{
     try{
         const resp = await Cards.find().exec();
@@ -162,5 +298,9 @@ module.exports = {
     postMyCard,
     postMyCards,
     deleteMyCard,
-    putReactualizarImagenes
+    putReactualizarImagenes,
+    postDeck,
+    getDecks,
+    getMyDeck,
+    putDeck
 }
